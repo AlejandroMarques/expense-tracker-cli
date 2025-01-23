@@ -1,0 +1,33 @@
+{
+  "name": "expense-tracker-cli",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AlejandroMarques/expense-tracker-cli#readme",
+  "bugs": {
+    "url": "https://github.com/AlejandroMarques/expense-tracker-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlejandroMarques/expense-tracker-cli.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "tsx ./src/index.ts",
+    "configure": "npm install && npm link && tsc && node ./dist/configure"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "bin": {
+    "expenses-tracker": "./dist/index.js"
+  }
+}

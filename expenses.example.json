@@ -1,0 +1,72 @@
+[
+  {
+    "id": 6,
+    "description": "test 6",
+    "amount": 45,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 2,
+    "description": "test 2",
+    "amount": 25,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 8,
+    "description": "test 8",
+    "amount": 55,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 4,
+    "description": "test 4",
+    "amount": 35,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 10,
+    "description": "test 10",
+    "amount": 65,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 1,
+    "description": "test 1",
+    "amount": 20,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 3,
+    "description": "test 3",
+    "amount": 30,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 7,
+    "description": "test 7",
+    "amount": 50,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 5,
+    "description": "test 5",
+    "amount": 40,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  },
+  {
+    "id": 9,
+    "description": "test 9",
+    "amount": 60,
+    "tags": [],
+    "date": "2025-01-23T19:30:00Z"
+  }
+]
