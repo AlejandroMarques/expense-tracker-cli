@@ -27,6 +27,10 @@ export default class ExpenseService {
 
   private readExpensesFile(): Expense[] {
     try {
+      if(!this.filePath){
+        this.logger.error("No file path provided");
+        throw new Error("No file path provided");
+      }
       const jsonData = this.fs.read(this.filePath);
       return JSON.parse(jsonData);
     } catch (error) {
@@ -114,15 +118,23 @@ export default class ExpenseService {
     this.logger.log(`Expense updated successfully (ID: ${data.id})`);
   }
 
-  list() {
-    const data = this.expenses.map((expense) => {
-      return {
-        ...expense,
-        date: new Date(expense.date).toLocaleDateString(),
-        updatedAt: new Date(expense.updatedAt).toLocaleString(),
-      };
-    });
-    this.logger.table(data);
+  list(tags?: string[]) {
+    const data =
+      tags && tags.length <= 0
+        ? this.expenses
+        : this.expenses.filter((expense) =>
+            tags?.some((tag) => expense.tags.includes(tag))
+          );
+
+    this.logger.table(
+      data.map((expense) => {
+        return {
+          ...expense,
+          date: new Date(expense.date).toLocaleDateString(),
+          updatedAt: new Date(expense.updatedAt).toLocaleString(),
+        };
+      })
+    );
   }
 
   summary(month?: number) {

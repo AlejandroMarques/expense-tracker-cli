@@ -7,14 +7,17 @@ export default class ListExpensesCommand extends BaseCommand {
     super();
   }
 
-  execute(): void {
-    this.expenseService.list();
+  execute(options: any): void {
+    const { tags } = options;
+    console.log(tags)
+    this.expenseService.list(tags);
   }
 
   setup(program: Command): void {
     program
     .command("list")
     .description("Get all expenses")
-    .action(() => this.execute());
+    .option("--tags, -t <tags...>", "Filter by tags", [])
+    .action((options) => this.execute(options));
   }
 }
