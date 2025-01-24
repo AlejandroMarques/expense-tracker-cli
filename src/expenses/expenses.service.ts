@@ -2,7 +2,7 @@ import Expense from "./expense.interface.js";
 import AddExpenseDto from "./dtos/add-expense.dto.js";
 import JsonCsv from "../adapters/json-csv/json-csv.interface.js";
 import FileSystem from "../adapters/filesystem/filesystem.interface.js";
-import "../env.js";
+import "../config/env.js";
 import UpdateExpenseDto from "./dtos/update-expense.dto.js";
 import Logger from "../adapters/logger/logger.interface.js";
 import Os from "../adapters/os/os.interface.js";
