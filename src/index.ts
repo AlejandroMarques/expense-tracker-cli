@@ -13,16 +13,19 @@ import ConsoleLogger from "./adapters/logger/console-logger.adapter.js";
 //DTOs
 import AddExpenseDto from "./expenses/dtos/add-expense.dto.js";
 import UpdateExpenseDto from "./expenses/dtos/update-expense.dto.js";
+import OsVanillaAdapter from "./adapters/os/os-vanilla.adapter.js";
 
 const main = () => {
   const jsonToCsvAdapter = new JsonToCsvVanilla();
   const fsAdapter = new FileSystemVanilla();
   const consoleLogger = new ConsoleLogger();
+  const osAdapter = new OsVanillaAdapter();
 
   const expenseService = new ExpenseService(
     jsonToCsvAdapter,
     fsAdapter,
-    consoleLogger
+    consoleLogger,
+    osAdapter
   );
 
   const program = new Command();

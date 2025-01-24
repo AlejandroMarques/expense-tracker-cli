@@ -5,18 +5,19 @@ import FileSystem from "../adapters/filesystem/filesystem.interface.js";
 import "../env.js";
 import UpdateExpenseDto from "./dtos/update-expense.dto.js";
 import Logger from "../adapters/logger/logger.interface.js";
-import * as os from "os";
 import * as path from "path";
+import Os from "../adapters/os/os.interface.js";
 
 export default class ExpenseService {
-  private readonly path: string = process.env.EXPENSES_FILE_PATH!;
+  private readonly filePath: string = process.env.EXPENSES_FILE_PATH!;
 
   private expenses: Expense[];
 
   constructor(
     private readonly jsonCsvRepo: JsonCsv,
     private readonly fs: FileSystem,
-    private readonly logger: Logger
+    private readonly logger: Logger,
+    private readonly os: Os
   ) {
     this.expenses = this.readExpensesFile().sort(
       (a: Expense, b: Expense) => a.id - b.id
@@ -25,7 +26,7 @@ export default class ExpenseService {
 
   private readExpensesFile(): Expense[] {
     try {
-      const jsonData = this.fs.read(this.path);
+      const jsonData = this.fs.read(this.filePath);
       return JSON.parse(jsonData);
     } catch (error) {
       this.logger.error("Error reading JSON:", error);
@@ -42,13 +43,13 @@ export default class ExpenseService {
   }
 
   private writeData() {
-    this.fs.write(this.path, JSON.stringify(this.expenses, null, "\t"));
+    this.fs.write(this.filePath, JSON.stringify(this.expenses, null, "\t"));
   }
 
   private getDownloadFolderPath(): string {
-    const homeDir = os.homedir();
+    const homeDir = this.os.homedir();
 
-    switch (os.platform()) {
+    switch (this.os.platform()) {
       case "win32":
         return path.join(homeDir, "Downloads");
       case "darwin":
@@ -116,7 +117,7 @@ export default class ExpenseService {
     const data = this.expenses.map((expense) => {
       return {
         ...expense,
-        date: new Date(expense.date).toLocaleString(),
+        date: new Date(expense.date).toLocaleDateString(),
         updatedAt: new Date(expense.updatedAt).toLocaleString(),
       };
     });
