@@ -61,9 +61,13 @@ export default class ExpenseService {
   }
 
   add(data: AddExpenseDto) {
-    if(data.amount && data.amount < 0) {
-      this.logger.error('Amount cannot be negative')
-      return
+    if (isNaN(data.amount)) {
+      this.logger.error("Amount must be a number");
+      return;
+    }
+    if (data.amount && data.amount < 0) {
+      this.logger.error("Amount cannot be negative");
+      return;
     }
     const expense: Expense = {
       id: this.generateId(),
@@ -78,14 +82,18 @@ export default class ExpenseService {
   }
 
   update(data: UpdateExpenseDto) {
-    const expense = this.read(data.id);
-    if (!expense) {
+    if (data.amount && isNaN(data.amount)) {
+      this.logger.error("Amount must be a number");
+      return;
+    }
+    if (data.amount && data.amount < 0) {
+      this.logger.error("Amount cannot be negative");
       return;
     }
 
-    if(data.amount && data.amount < 0) {
-      this.logger.error('Amount cannot be negative')
-      return
+    const expense = this.read(data.id);
+    if (!expense) {
+      return;
     }
 
     const updated = {
@@ -148,12 +156,12 @@ export default class ExpenseService {
   }
 
   read(id: number) {
-    if (!id) {
-      this.logger.error("No id provided");
+    if (typeof id !== "number" || isNaN(id)) {
+      this.logger.error(`Id is not valid, you must pass a number`);
       return null;
     }
-    if (typeof id !== "number") {
-      this.logger.error(`Id "${id}" is not valid, try to pass a number`);
+    if (!id) {
+      this.logger.error("No id provided");
       return null;
     }
     const expense = this.expenses.find((expense) => expense.id === id);
@@ -166,8 +174,11 @@ export default class ExpenseService {
 
   export() {
     const csv = this.jsonCsvRepo.convertJsonToCsv(this.expenses);
-    const pathToCsv = path.resolve(this.getDownloadFolderPath(), 'expenses.csv')
+    const pathToCsv = path.resolve(
+      this.getDownloadFolderPath(),
+      "expenses.csv"
+    );
     this.fs.write(pathToCsv, csv);
-    this.logger.log('CSV file saved in downloads folder')
+    this.logger.log("CSV file saved in downloads folder");
   }
 }
