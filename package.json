@@ -18,7 +18,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "tsx ./src/index.ts add --description start --amount 12",
-    "configure": "npm install && npm link && tsc && node ./dist/configure"
+    "configure": "npm install && tsc && node ./dist/configure && npm link"
   },
   "dependencies": {
     "commander": "^13.1.0",
