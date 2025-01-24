@@ -27,7 +27,7 @@ export default class ExpenseService {
 
   private readExpensesFile(): Expense[] {
     try {
-      if(!this.filePath){
+      if (!this.filePath) {
         this.logger.error("No file path provided");
         throw new Error("No file path provided");
       }
@@ -64,6 +64,16 @@ export default class ExpenseService {
       default:
         throw new Error("Unsupported OS");
     }
+  }
+
+  private filterByTags(tags: string[], expenses: Expense[]): Expense[] {
+    const data =
+      tags && tags.length <= 0
+        ? expenses
+        : expenses.filter((expense) =>
+            tags?.some((tag) => expense.tags.includes(tag))
+          );
+    return data;
   }
 
   add(data: AddExpenseDto) {
@@ -118,13 +128,13 @@ export default class ExpenseService {
     this.logger.log(`Expense updated successfully (ID: ${data.id})`);
   }
 
-  list(tags?: string[]) {
-    const data =
-      tags && tags.length <= 0
-        ? this.expenses
-        : this.expenses.filter((expense) =>
-            tags?.some((tag) => expense.tags.includes(tag))
-          );
+  list(tags: string[] = []) {
+    const data = this.filterByTags(tags, this.expenses);
+
+    if (data.length <= 0) {
+      this.logger.log("No expenses found");
+      return
+    }
 
     this.logger.table(
       data.map((expense) => {
