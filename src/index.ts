@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //Modules
 import { Command } from "commander";
-import figlet from "figlet";
+
 //Services
 import ExpenseService from "./expenses/expenses.service.js";
 
@@ -26,8 +26,6 @@ const main = () => {
   );
 
   const program = new Command();
-
-  consoleLogger.log(figlet.textSync("Me Mato"));
 
   program
     .name("expense-tracker")
