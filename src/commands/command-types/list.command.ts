@@ -9,7 +9,6 @@ export default class ListExpensesCommand extends BaseCommand {
 
   execute(options: any): void {
     const { tags } = options;
-    console.log(tags)
     this.expenseService.list(tags);
   }
 
