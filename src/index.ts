@@ -9,24 +9,31 @@ import ExpenseService from "./expenses/expenses.service.js";
 import FileSystemVanilla from "./adapters/filesystem/filesystem-vanilla.adapter.js";
 import JsonToCsvVanilla from "./adapters/json-csv/json-csv-vanilla.adapter.js";
 import ConsoleLogger from "./adapters/logger/console-logger.adapter.js";
+import PathVanillaAdapter from "./adapters/path/path-vanilla.adapter";
+import OsVanillaAdapter from "./adapters/os/os-vanilla.adapter.js";
 
 //DTOs
 import AddExpenseDto from "./expenses/dtos/add-expense.dto.js";
 import UpdateExpenseDto from "./expenses/dtos/update-expense.dto.js";
-import OsVanillaAdapter from "./adapters/os/os-vanilla.adapter.js";
 
-const main = () => {
+const instantiateService = (): ExpenseService => {
   const jsonToCsvAdapter = new JsonToCsvVanilla();
   const fsAdapter = new FileSystemVanilla();
   const consoleLogger = new ConsoleLogger();
   const osAdapter = new OsVanillaAdapter();
+  const pathAdapter = new PathVanillaAdapter();
 
-  const expenseService = new ExpenseService(
+  return new ExpenseService(
     jsonToCsvAdapter,
     fsAdapter,
     consoleLogger,
-    osAdapter
+    osAdapter,
+    pathAdapter
   );
+};
+
+const main = () => {
+  const expenseService = instantiateService();
 
   const program = new Command();
 
@@ -94,7 +101,7 @@ const main = () => {
       expenseService.delete(Number(id));
     });
 
-    program
+  program
     .command("export")
     .description("Exports all expenses to CSV file")
     .action(() => {

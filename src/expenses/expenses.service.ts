@@ -5,8 +5,8 @@ import FileSystem from "../adapters/filesystem/filesystem.interface.js";
 import "../env.js";
 import UpdateExpenseDto from "./dtos/update-expense.dto.js";
 import Logger from "../adapters/logger/logger.interface.js";
-import * as path from "path";
 import Os from "../adapters/os/os.interface.js";
+import Path from "../adapters/path/path.interface.js";
 
 export default class ExpenseService {
   private readonly filePath: string = process.env.EXPENSES_FILE_PATH!;
@@ -17,7 +17,8 @@ export default class ExpenseService {
     private readonly jsonCsvRepo: JsonCsv,
     private readonly fs: FileSystem,
     private readonly logger: Logger,
-    private readonly os: Os
+    private readonly os: Os,
+    private readonly path: Path
   ) {
     this.expenses = this.readExpensesFile().sort(
       (a: Expense, b: Expense) => a.id - b.id
@@ -51,11 +52,11 @@ export default class ExpenseService {
 
     switch (this.os.platform()) {
       case "win32":
-        return path.join(homeDir, "Downloads");
+        return this.path.join(homeDir, "Downloads");
       case "darwin":
-        return path.join(homeDir, "Downloads");
+        return this.path.join(homeDir, "Downloads");
       case "linux":
-        return path.join(homeDir, "Descargas"); // Puede variar según la configuración del idioma
+        return this.path.join(homeDir, "Descargas"); // Puede variar según la configuración del idioma
       default:
         throw new Error("Unsupported OS");
     }
@@ -175,7 +176,7 @@ export default class ExpenseService {
 
   export() {
     const csv = this.jsonCsvRepo.convertJsonToCsv(this.expenses);
-    const pathToCsv = path.resolve(
+    const pathToCsv = this.path.resolve(
       this.getDownloadFolderPath(),
       "expenses.csv"
     );
