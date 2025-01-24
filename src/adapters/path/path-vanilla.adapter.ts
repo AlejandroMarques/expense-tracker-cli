@@ -1,4 +1,4 @@
-import Path from './path.interface';
+import Path from './path.interface.js';
 import * as path from 'path';
 
 export default class PathVanillaAdapter implements Path {
