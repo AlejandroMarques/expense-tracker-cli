@@ -1,6 +1,6 @@
 # Expense Tracker
 
-CLI utility to keep track of your expenses
+CLI utility to keep track of your expenses based on roadmap [expense-tracker-cli](https://roadmap.sh/projects/expense-tracker)
 
 ## Installation
 
