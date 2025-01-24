@@ -1,4 +1,4 @@
-import JsonCsv from "./json-csv.interface";
+import JsonCsv from "./json-csv.interface.js";
 
 export default class JsonToCsvVanilla implements JsonCsv {
   convertJsonToCsv(json: any[]): string {

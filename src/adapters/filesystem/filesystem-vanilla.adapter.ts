@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import FileSystem from "./filesystem.interface";
+import FileSystem from "./filesystem.interface.js";
 
 export default class FileSystemVanilla implements FileSystem {
   read(path: string) {

@@ -13,16 +13,20 @@
   "license": "ISC",
   "author": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "tsx ./src/index.ts",
+    "start": "tsx ./src/index.ts add --description start --amount 12",
     "configure": "npm install && npm link && tsc && node ./dist/configure"
   },
   "dependencies": {
-    "dotenv": "^16.4.7"
+    "commander": "^13.1.0",
+    "dotenv": "^16.4.7",
+    "figlet": "^1.8.0"
   },
   "devDependencies": {
+    "@types/figlet": "^1.7.0",
     "@types/node": "^22.10.10",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"

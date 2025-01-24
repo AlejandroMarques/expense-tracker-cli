@@ -1,4 +1,4 @@
-import Logger from "./logger.interface";
+import Logger from "./logger.interface.js";
 
 export default class ConsoleLogger implements Logger {
   log(...args: any[]): void {
@@ -9,5 +9,8 @@ export default class ConsoleLogger implements Logger {
   }
   error(...args: any[]): void {
     console.error(...args);
+  }
+  table(data: any[], fields?: string[]): void {
+    console.table(data, fields)
   }
 }

@@ -1,14 +1,16 @@
-import Expense from "./expense.interface";
-import AddExpenseDto from "./dtos/add-expense.dto";
-import JsonCsv from "../adapters/json-csv/json-csv.interface";
-import FileSystem from "../adapters/filesystem/filesystem.interface";
-import "../env";
-import UpdateExpenseDto from "./dtos/update-expense.dto";
-import Logger from "../adapters/logger/logger.interface";
+import Expense from "./expense.interface.js";
+import AddExpenseDto from "./dtos/add-expense.dto.js";
+import JsonCsv from "../adapters/json-csv/json-csv.interface.js";
+import FileSystem from "../adapters/filesystem/filesystem.interface.js";
+import "../env.js";
+import UpdateExpenseDto from "./dtos/update-expense.dto.js";
+import Logger from "../adapters/logger/logger.interface.js";
+import * as os from "os";
+import * as path from "path";
 
 export default class ExpenseService {
   private readonly path: string = process.env.EXPENSES_FILE_PATH!;
-  
+
   private expenses: Expense[];
 
   constructor(
@@ -43,7 +45,26 @@ export default class ExpenseService {
     this.fs.write(this.path, JSON.stringify(this.expenses, null, "\t"));
   }
 
+  private getDownloadFolderPath(): string {
+    const homeDir = os.homedir();
+
+    switch (os.platform()) {
+      case "win32":
+        return path.join(homeDir, "Downloads");
+      case "darwin":
+        return path.join(homeDir, "Downloads");
+      case "linux":
+        return path.join(homeDir, "Descargas"); // Puede variar según la configuración del idioma
+      default:
+        throw new Error("Unsupported OS");
+    }
+  }
+
   add(data: AddExpenseDto) {
+    if(data.amount && data.amount < 0) {
+      this.logger.error('Amount cannot be negative')
+      return
+    }
     const expense: Expense = {
       id: this.generateId(),
       ...data,
@@ -62,9 +83,17 @@ export default class ExpenseService {
       return;
     }
 
+    if(data.amount && data.amount < 0) {
+      this.logger.error('Amount cannot be negative')
+      return
+    }
+
     const updated = {
-      ...expense,
-      ...data,
+      id: data.id,
+      description: data.description ?? expense.description,
+      amount: data.amount ?? expense.amount,
+      tags: data.tags ?? expense.tags,
+      date: expense.date,
       updatedAt: new Date(),
     };
 
@@ -76,7 +105,14 @@ export default class ExpenseService {
   }
 
   list() {
-    return this.expenses;
+    const data = this.expenses.map((expense) => {
+      return {
+        ...expense,
+        date: new Date(expense.date).toLocaleString(),
+        updatedAt: new Date(expense.updatedAt).toLocaleString(),
+      };
+    });
+    this.logger.table(data);
   }
 
   summary(month?: number) {
@@ -130,6 +166,8 @@ export default class ExpenseService {
 
   export() {
     const csv = this.jsonCsvRepo.convertJsonToCsv(this.expenses);
-    this.fs.write(this.path, csv);
+    const pathToCsv = path.resolve(this.getDownloadFolderPath(), 'expenses.csv')
+    this.fs.write(pathToCsv, csv);
+    this.logger.log('CSV file saved in downloads folder')
   }
 }
