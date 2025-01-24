@@ -147,13 +147,20 @@ export default class ExpenseService {
     );
   }
 
-  summary(month?: number) {
+  summary(month?: number, tags: string[] = []) {
+    const data = this.filterByTags(tags, this.expenses);
+
+    if (data.length <= 0) {
+      this.logger.log("No expenses found");
+      return
+    }
+
     const expenses = month
-      ? this.expenses.filter((obj) => {
+      ? data.filter((obj) => {
           const date = new Date(obj.date);
           return date.getMonth() + 1 === month;
         })
-      : this.expenses;
+      : data;
 
     const value = expenses.reduce(
       (accumulator, expense) => accumulator + expense.amount,
@@ -167,7 +174,7 @@ export default class ExpenseService {
               month: "long",
             })}`
           : ""
-      }: ${value}€`
+      }: ${value}€${tags.length > 0 ? ` with tags: ${tags.join(", ")}` : ""}`
     );
   }
 

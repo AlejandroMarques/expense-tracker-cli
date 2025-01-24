@@ -8,8 +8,8 @@ export default class SummaryExpensesCommand extends BaseCommand {
   }
 
   execute(options:any): void {
-    const { month } = options;
-    this.expenseService.summary(Number(month));
+    const { month, tags } = options;
+    this.expenseService.summary(Number(month), tags);
   }
 
   setup(program: Command): void {
@@ -17,6 +17,7 @@ export default class SummaryExpensesCommand extends BaseCommand {
     .command("summary")
     .description("Get summary of all expenses or just one month")
     .option("--month, -m <month>", "Summary month")
+    .option("--tags, -t <tags...>", "Filter by tags", [])
     .action((options) => this.execute(options));
   }
 }
